@@ -1,0 +1,38 @@
+var mongoose = require('mongoose');
+var uniqueValidator = require('mongoose-unique-validator');
+var Schema = mongoose.Schema;
+
+var rolesValidos = {
+    values: ['ADMIN_ROLE', 'USER_ROLE'],
+    message: '{VALUE} no es un rol permitido'
+};
+
+var usuarioSchema = new Schema({
+
+    nombre: {
+        type: String,
+        required: [true, 'El nombre es obligatorio'],
+    },
+    email: {
+        type: String,
+        unique: true,
+        required: [true, 'El email es obligatorio'],
+    },
+    password: {
+        type: String,
+        required: [true, 'La contraseña es obligatoria'],
+    },
+    role: {
+        type: String,
+        default: 'USER_ROLE',
+        required: false,
+        enum: rolesValidos
+    },
+    img: {
+        type: String,
+        required: false,
+    }
+});
+usuarioSchema.plugin(uniqueValidator, { message: '{PATH} debe ser único' });
+
+module.exports = mongoose.model('Usuario', usuarioSchema);

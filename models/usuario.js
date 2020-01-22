@@ -31,6 +31,10 @@ var usuarioSchema = new Schema({
     img: {
         type: String,
         required: false,
+    },
+    google: {
+        type: Boolean,
+        default: false
     }
 });
 usuarioSchema.plugin(uniqueValidator, { message: '{PATH} debe ser único' });

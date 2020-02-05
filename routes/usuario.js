@@ -12,7 +12,7 @@ app.get('/', (req, res, next) => {
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
-    Usuario.find({}, 'nombre email img role')
+    Usuario.find({}, 'nombre email img role google')
         .skip(desde)
         .limit(5)
         .exec((err, usuarios) => {
@@ -39,7 +39,7 @@ app.get('/', (req, res, next) => {
 /**
  * Actualizar usuario
  */
-app.put('/:id', midAuthentication.verificaToken, (req, res) => {
+app.put('/:id', [midAuthentication.verificaToken, midAuthentication.verificaADMIN_ROLE_o_MismoUsuario], (req, res) => {
     var id = req.params.id;
     var body = req.body;
     console.log(id);
@@ -114,7 +114,7 @@ app.post('/', (req, res) => {
 /**
  * BORRAR UN USUARIO POR ID
  */
-app.delete('/:id', midAuthentication.verificaToken, (req, res) => {
+app.delete('/:id', [midAuthentication.verificaToken, midAuthentication.verificaADMIN_ROLE], (req, res) => {
     var id = req.params.id;
     Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
         if (err) {
